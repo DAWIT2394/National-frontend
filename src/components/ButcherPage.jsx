@@ -156,16 +156,16 @@ export default function ButcherPage() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this order?')) {
-      try {
-        await axios.delete(`http://localhost:9000/api/orders/${id}`);
-        fetchOrders();
-      } catch {
-        setErrorMessage('Failed to delete order.');
-      }
-    }
-  };
+  // const handleDelete = async (id) => {
+  //   if (window.confirm('Are you sure you want to delete this order?')) {
+  //     try {
+  //       await axios.delete(`http://localhost:9000/api/orders/${id}`);
+  //       fetchOrders();
+  //     } catch {
+  //       setErrorMessage('Failed to delete order.');
+  //     }
+  //   }
+  // };
 
   const handleEdit = (order) => {
     setEditOrderId(order._id);
@@ -318,7 +318,7 @@ export default function ButcherPage() {
                     <p className="text-xs text-gray-400">Date: {new Date(order.createdAt).toLocaleString()}</p>
                     <div className="mt-2 flex gap-2">
                       <button onClick={() => handleEdit(order)} className="text-sm text-yellow-400 hover:underline">✏️ Edit</button>
-                      <button onClick={() => handleDelete(order._id)} className="text-sm text-red-400 hover:underline">🗑️ Delete</button>
+                      {/* <button onClick={() => handleDelete(order._id)} className="text-sm text-red-400 hover:underline">🗑️ Delete</button> */}
                     </div>
                   </div>
                 ))}
