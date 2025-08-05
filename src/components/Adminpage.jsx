@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 import {
   PieChart,
   Pie,
@@ -167,6 +169,13 @@ export default function AdminPage() {
         >
           Refresh
         </button>
+        <Link
+  to="/Reportpage"
+  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded inline-block text-white text-center"
+>
+  Report
+</Link>
+
       </div>
 
       {errorMessage && (

@@ -3,6 +3,8 @@ import axios from 'axios';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Pie } from 'react-chartjs-2';
+import { Link } from 'react-router-dom';
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -81,6 +83,15 @@ export default function OrderReportPage() {
       >
         Export PDF
       </button>
+      <div>
+      <Link
+  to="/Admin"
+  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded inline-block text-white text-center"
+>
+ Back to Adminpage
+</Link>
+      </div>
+     
 
       <table className="w-full table-auto border border-collapse mb-6">
         <thead>
