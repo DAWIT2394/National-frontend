@@ -21,11 +21,15 @@ export default function AdminPage() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [loadingOrders, setLoadingOrders] = useState(false);
 
   // Pagination (optional)
   const recordsPerPage = 6;
   const [currentPageItems, setCurrentPageItems] = useState(1);
   const [currentPageWaiters, setCurrentPageWaiters] = useState(1);
+const [currentPage, setCurrentPage] = useState(1);
+const ORDERS_PER_PAGE = 5;
+
 
   // Fetch data
   useEffect(() => {
@@ -314,6 +318,86 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+<div className="mt-10">
+  <h3 className="text-xl font-bold text-red-400 mb-4">Submitted Orders (All)</h3>
+
+  {loadingOrders ? (
+    <p>Loading orders...</p>
+  ) : (
+    (() => {
+      const totalPages = Math.ceil(orders.length / ORDERS_PER_PAGE);
+      const paginatedOrders = orders.slice(
+        (currentPage - 1) * ORDERS_PER_PAGE,
+        currentPage * ORDERS_PER_PAGE
+      );
+
+      const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+      const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+
+      return orders.length === 0 ? (
+        <p className="text-gray-400">No orders submitted.</p>
+      ) : (
+        <>
+          <div className="space-y-4">
+            {paginatedOrders.map((order) => (
+              <div
+                key={order._id}
+                className="p-4 bg-zinc-800 border border-zinc-700 rounded-lg"
+              >
+                <p><strong>Customer:</strong> {order.customerName || 'N/A'}</p>
+                <p><strong>Type:</strong> {order.salesType}</p>
+                <p><strong>Items:</strong> {Array.isArray(order.meatType) ? order.meatType.join(', ') : order.meatType}</p>
+                <p><strong>KG:</strong> {order.kilogram}</p>
+                {order.salesType === 'INDOOR' && (
+                  <p><strong>Waiter:</strong> {order.waiterName}</p>
+                )}
+                <p className="text-xs text-gray-400">Date: {new Date(order.createdAt).toLocaleString()}</p>
+
+                <div className="mt-2 flex gap-2">
+                  <button
+                    onClick={() => handleEdit(order)}
+                    className="text-sm text-yellow-400 hover:underline"
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(order._id)}
+                    className="text-sm text-red-400 hover:underline"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center mt-6">
+              <button
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                className="text-white disabled:opacity-30"
+              >
+                ⬅️ Previous
+              </button>
+              <span className="text-white text-sm">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                className="text-white disabled:opacity-30"
+              >
+                Next ➡️
+              </button>
+            </div>
+          )}
+        </>
+      );
+    })()
+  )}
+</div>
 
       {/* Pie Chart */}
       <div className="bg-zinc-900 p-6 rounded shadow-lg">
