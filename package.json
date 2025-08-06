@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:6000",
+  "proxy": "http://localhost:9000",
   "name": "butcher",
   "version": "0.1.0",
   "private": true,
