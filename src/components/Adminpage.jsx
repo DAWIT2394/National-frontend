@@ -21,7 +21,7 @@ export default function AdminPage() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [loadingOrders, setLoadingOrders] = useState(false);
+  const [loadingOrders, ] = useState(false);
 
   // Pagination (optional)
   const recordsPerPage = 6;
