@@ -26,12 +26,14 @@ export default function OrderReportPage() {
   // Group total KG by meat type
   const meatKgMap = {};
   orders.forEach(order => {
-    // Ensure meatType is always array
     const meatTypes = Array.isArray(order.meatType) ? order.meatType : [order.meatType];
     meatTypes.forEach(type => {
       meatKgMap[type] = (meatKgMap[type] || 0) + Number(order.kilogram || 0);
     });
   });
+
+  // Calculate total KG
+  const totalKg = orders.reduce((sum, order) => sum + Number(order.kilogram || 0), 0);
 
   const pieData = {
     labels: Object.keys(meatKgMap),
@@ -67,7 +69,10 @@ export default function OrderReportPage() {
         order.kilogram || '',
         order.salesType || '',
         order.createdAt ? new Date(order.createdAt).toLocaleString() : ''
-      ])
+      ]),
+      foot: [
+        ['', '', 'Total KG', totalKg, '', '']
+      ]
     });
 
     doc.save('butchery_report.pdf');
@@ -83,15 +88,15 @@ export default function OrderReportPage() {
       >
         Export PDF
       </button>
-      <div>
-      <Link
-  to="/Admin"
-  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded inline-block text-white text-center"
->
- Back to Adminpage
-</Link>
+
+      <div className="mb-4">
+        <Link
+          to="/Admin"
+          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded inline-block text-white text-center"
+        >
+          Back to Adminpage
+        </Link>
       </div>
-     
 
       <table className="w-full table-auto border border-collapse mb-6">
         <thead>
@@ -120,6 +125,13 @@ export default function OrderReportPage() {
             </tr>
           ))}
         </tbody>
+        <tfoot>
+          <tr className="bg-gray-100 font-bold">
+            <td className="border p-2 text-right" colSpan="3">Total KG</td>
+            <td className="border p-2">{totalKg}</td>
+            <td className="border p-2" colSpan="2"></td>
+          </tr>
+        </tfoot>
       </table>
 
       <div className="max-w-md mx-auto">

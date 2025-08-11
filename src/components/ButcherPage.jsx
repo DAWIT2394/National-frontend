@@ -187,22 +187,35 @@ export default function ButcherPage() {
   return (
     <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 py-10 overflow-auto">
       <div className="w-full max-w-5xl px-4 sm:px-6 md:px-8 py-6 bg-zinc-900 rounded-xl shadow-xl">
+
+        {/* Logo */}
+        <img src="/logo.png" alt="Logo" className="h-16 mb-4 mx-auto" />
+
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-red-500">
-            {editOrderId ? 'Edit Order' : 'Add Butcher'}
+            {editOrderId ? 'Edit Order' : 'Butcher/ስጋ ቤት'}
           </h2>
           <div className="flex flex-wrap gap-2 text-sm">
-            <button onClick={fetchItems} disabled={loadingItems}
-              className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded border border-gray-500 disabled:opacity-50">
+            <button
+              onClick={fetchItems}
+              disabled={loadingItems}
+              className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded border border-gray-500 disabled:opacity-50"
+            >
               {loadingItems ? 'Loading...' : 'Refresh Items'}
             </button>
-            <button onClick={fetchWaiters} disabled={loadingWaiters}
-              className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded border border-gray-500 disabled:opacity-50">
+            <button
+              onClick={fetchWaiters}
+              disabled={loadingWaiters}
+              className="bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded border border-gray-500 disabled:opacity-50"
+            >
               {loadingWaiters ? 'Loading...' : 'Refresh Waiters'}
             </button>
-            <button onClick={fetchOrders} disabled={loadingOrders}
-              className="bg-red-700 hover:bg-red-600 px-3 py-1 rounded border border-red-500 text-white disabled:opacity-50">
+            <button
+              onClick={fetchOrders}
+              disabled={loadingOrders}
+              className="bg-red-700 hover:bg-red-600 px-3 py-1 rounded border border-red-500 text-white disabled:opacity-50"
+            >
               {loadingOrders ? 'Refreshing...' : 'Refresh Orders'}
             </button>
             <span className="text-red-400">{formattedTime}</span>
@@ -226,9 +239,12 @@ export default function ButcherPage() {
               {items.map((item) => {
                 const isSelected = selectedItems.includes(item.name);
                 return (
-                  <div key={item._id} onClick={() => handleSelect(item.name)}
+                  <div
+                    key={item._id}
+                    onClick={() => handleSelect(item.name)}
                     className={`p-3 rounded-lg text-center cursor-pointer transition border
-                    ${isSelected ? 'border-red-500 bg-zinc-800' : 'border-zinc-700 hover:border-red-400'}`}>
+                      ${isSelected ? 'border-red-500 bg-zinc-800' : 'border-zinc-700 hover:border-red-400'}`}
+                  >
                     <span>{item.name}</span>
                   </div>
                 );
@@ -241,16 +257,25 @@ export default function ButcherPage() {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-semibold text-red-400 mb-1">KG (for all selected)</label>
-            <input type="number" step="any" min="0" placeholder="KG"
+            <input
+              type="number"
+              step="any"
+              min="0"
+              placeholder="KG"
               className="w-full bg-zinc-800 text-white border border-zinc-700 rounded px-3 py-2"
-              value={sharedKg} onChange={(e) => setSharedKg(e.target.value)} />
+              value={sharedKg}
+              onChange={(e) => setSharedKg(e.target.value)}
+            />
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-red-400 mb-1">Customer Name</label>
-            <input type="text"
+            <input
+              type="text"
               className="w-full bg-zinc-800 text-white border border-zinc-700 rounded px-3 py-2"
-              value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+            />
           </div>
 
           <div>
@@ -258,9 +283,13 @@ export default function ButcherPage() {
             <div className="flex gap-4">
               {['INDOOR', 'OUTDOOR'].map((type) => (
                 <label key={type} className="flex items-center gap-2">
-                  <input type="radio" name="orderType" value={type}
+                  <input
+                    type="radio"
+                    name="orderType"
+                    value={type}
                     checked={orderType === type}
-                    onChange={() => setOrderType(type)} />
+                    onChange={() => setOrderType(type)}
+                  />
                   {type}
                 </label>
               ))}
@@ -270,12 +299,16 @@ export default function ButcherPage() {
           {orderType === 'INDOOR' && (
             <div>
               <label className="block text-sm font-semibold text-red-400 mb-1">Select Waiter</label>
-              <select value={selectedWaiter}
+              <select
+                value={selectedWaiter}
                 onChange={(e) => setSelectedWaiter(e.target.value)}
-                className="w-full bg-zinc-800 text-white border border-zinc-700 rounded px-3 py-2">
+                className="w-full bg-zinc-800 text-white border border-zinc-700 rounded px-3 py-2"
+              >
                 <option value="">-- Select Waiter --</option>
                 {waiters.map((w) => (
-                  <option key={w._id} value={w.name}>{w.name}</option>
+                  <option key={w._id} value={w.name}>
+                    {w.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -285,16 +318,19 @@ export default function ButcherPage() {
         {/* Submit + Cancel */}
         <div className="flex flex-wrap gap-4 justify-end mt-6">
           {editOrderId && (
-            <button onClick={resetForm}
-              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-semibold">
+            <button
+              onClick={resetForm}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded font-semibold"
+            >
               Cancel
             </button>
           )}
-          <button onClick={handleSubmit} disabled={submitting}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold disabled:opacity-50">
-            {submitting
-              ? editOrderId ? 'Updating...' : 'Submitting...'
-              : editOrderId ? 'Update Order' : 'Submit Order'}
+          <button
+            onClick={handleSubmit}
+            disabled={submitting}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded font-semibold disabled:opacity-50"
+          >
+            {submitting ? (editOrderId ? 'Updating...' : 'Submitting...') : editOrderId ? 'Update Order' : 'Submit Order'}
           </button>
         </div>
 
@@ -310,14 +346,28 @@ export default function ButcherPage() {
               <div className="space-y-4">
                 {paginatedOrders.map((order) => (
                   <div key={order._id} className="p-4 bg-zinc-800 border border-zinc-700 rounded-lg">
-                    <p><strong>Customer:</strong> {order.customerName || 'N/A'}</p>
-                    <p><strong>Type:</strong> {order.salesType}</p>
-                    <p><strong>Items:</strong> {Array.isArray(order.meatType) ? order.meatType.join(', ') : order.meatType}</p>
-                    <p><strong>KG:</strong> {order.kilogram}</p>
-                    {order.salesType === 'INDOOR' && <p><strong>Waiter:</strong> {order.waiterName}</p>}
+                    <p>
+                      <strong>Customer:</strong> {order.customerName || 'N/A'}
+                    </p>
+                    <p>
+                      <strong>Type:</strong> {order.salesType}
+                    </p>
+                    <p>
+                      <strong>Items:</strong> {Array.isArray(order.meatType) ? order.meatType.join(', ') : order.meatType}
+                    </p>
+                    <p>
+                      <strong>KG:</strong> {order.kilogram}
+                    </p>
+                    {order.salesType === 'INDOOR' && (
+                      <p>
+                        <strong>Waiter:</strong> {order.waiterName}
+                      </p>
+                    )}
                     <p className="text-xs text-gray-400">Date: {new Date(order.createdAt).toLocaleString()}</p>
                     <div className="mt-2 flex gap-2">
-                      <button onClick={() => handleEdit(order)} className="text-sm text-yellow-400 hover:underline">✏️ Edit</button>
+                      <button onClick={() => handleEdit(order)} className="text-sm text-yellow-400 hover:underline">
+                        ✏️ Edit
+                      </button>
                       {/* <button onClick={() => handleDelete(order._id)} className="text-sm text-red-400 hover:underline">🗑️ Delete</button> */}
                     </div>
                   </div>
@@ -327,13 +377,23 @@ export default function ButcherPage() {
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-between items-center mt-6">
-                  <button onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className="text-white disabled:opacity-30">⬅️ Previous</button>
-                  <span className="text-white text-sm">Page {currentPage} of {totalPages}</span>
-                  <button onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                    className="text-white disabled:opacity-30"
+                  >
+                    ⬅️ Previous
+                  </button>
+                  <span className="text-white text-sm">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="text-white disabled:opacity-30">Next ➡️</button>
+                    className="text-white disabled:opacity-30"
+                  >
+                    Next ➡️
+                  </button>
                 </div>
               )}
             </>

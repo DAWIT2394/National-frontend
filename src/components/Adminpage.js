@@ -66,7 +66,16 @@ const ORDERS_PER_PAGE = 5;
       console.error('Fetch orders failed', e);
     }
   };
-
+const handleDeletee = async (id) => {
+    if (window.confirm('Are you sure you want to delete this order?')) {
+      try {
+        await axios.delete(`http://localhost:9000/api/orders/${id}`);
+        fetchOrders();
+      } catch {
+        setErrorMessage('Failed to delete order.');
+      }
+    }
+  };
   // Add Item or Waiter
   const handleAdd = async (type) => {
     setErrorMessage(null);
@@ -370,7 +379,7 @@ const ORDERS_PER_PAGE = 5;
                     ✏️ Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(order._id)}
+                    onClick={() => handleDeletee(order._id)}
                     className="text-sm text-red-400 hover:underline"
                   >
                     🗑️ Delete
