@@ -30,7 +30,7 @@ export const AllComponents = () => {
   };
 
   const navButtonClass = (page) =>
-    `w-full text-left px-6 py-3 hover:bg-blue-50 transition ${
+    `w-full text-left px-4 sm:px-6 py-2 sm:py-3 hover:bg-blue-50 transition rounded ${
       activePage === page ? "bg-blue-100 font-semibold" : ""
     }`;
 
@@ -42,8 +42,10 @@ export const AllComponents = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">
       {/* Mobile Top Bar */}
-      <div className="md:hidden flex justify-between items-center bg-white shadow px-4 py-3">
-        <h1 className="text-xl font-bold text-blue-600">Dashboard</h1>
+      <div className="md:hidden flex justify-between items-center bg-white shadow px-4 py-3 fixed top-0 left-0 w-full z-40">
+        <h1 className="text-lg sm:text-xl font-bold text-blue-600">
+          Dashboard
+        </h1>
         <button onClick={() => setSidebarOpen(!sidebarOpen)}>
           {sidebarOpen ? (
             <XIcon className="h-6 w-6 text-gray-700" />
@@ -59,11 +61,14 @@ export const AllComponents = () => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 transition-transform duration-300 z-50`}
       >
-        <div className="p-6 border-b hidden md:block">
-          <h1 className="text-2xl font-bold text-blue-600">Dashboard</h1>
+        <div className="p-4 sm:p-6 border-b hidden md:block">
+          <h1 className="text-xl sm:text-2xl font-bold text-blue-600">
+            Dashboard
+          </h1>
         </div>
+
         <nav className="mt-4 flex flex-col h-[calc(100%-4rem)]">
-          <div className="flex-1">
+          <div className="flex-1 space-y-1">
             <button
               onClick={() => {
                 setActivePage("admin-create-user");
@@ -125,8 +130,10 @@ export const AllComponents = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-4 md:p-6 mt-14 md:mt-0">
-        <div className="bg-white rounded-xl shadow p-6">{renderPage()}</div>
+      <main className="flex-1 p-4 sm:p-6 mt-14 md:mt-0">
+        <div className="bg-white rounded-xl shadow p-4 sm:p-6">
+          {renderPage()}
+        </div>
       </main>
     </div>
   );
