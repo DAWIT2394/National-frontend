@@ -79,63 +79,71 @@ export default function OrderReportPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Butchery Orders</h1>
+    <div className="max-w-6xl mx-auto p-4 sm:p-6 bg-white rounded shadow">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center sm:text-left">
+        Butchery Orders
+      </h1>
 
-      <button
-        onClick={exportToPDF}
-        className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Export PDF
-      </button>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <button
+          onClick={exportToPDF}
+          className="w-full sm:w-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Export PDF
+        </button>
 
-      <div className="mb-4">
         <Link
           to="/Admin"
-          className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded inline-block text-white text-center"
+          className="w-full sm:w-auto bg-red-600 hover:bg-red-700 px-4 py-2 rounded text-white text-center"
         >
-          Back to Adminpage
+          Back to Admin Page
         </Link>
       </div>
 
-      <table className="w-full table-auto border border-collapse mb-6">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border p-2">Customer</th>
-            <th className="border p-2">Meat Type</th>
-            <th className="border p-2">Waiter</th>
-            <th className="border p-2">KG</th>
-            <th className="border p-2">Sales Type</th>
-            <th className="border p-2">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order, i) => (
-            <tr key={i}>
-              <td className="border p-2">{order.customerName || '-'}</td>
-              <td className="border p-2">
-                {Array.isArray(order.meatType) ? order.meatType.join(', ') : order.meatType || '-'}
-              </td>
-              <td className="border p-2">{order.waiterName || '-'}</td>
-              <td className="border p-2">{order.kilogram || '-'}</td>
-              <td className="border p-2">{order.salesType || '-'}</td>
-              <td className="border p-2">
-                {order.createdAt ? new Date(order.createdAt).toLocaleString() : '-'}
-              </td>
+      {/* Responsive Table */}
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[600px] table-auto border border-collapse mb-6 text-sm sm:text-base">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-2">Customer</th>
+              <th className="border p-2">Meat Type</th>
+              <th className="border p-2">Waiter</th>
+              <th className="border p-2">KG</th>
+              <th className="border p-2">Sales Type</th>
+              <th className="border p-2">Date</th>
             </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr className="bg-gray-100 font-bold">
-            <td className="border p-2 text-right" colSpan="3">Total KG</td>
-            <td className="border p-2">{totalKg}</td>
-            <td className="border p-2" colSpan="2"></td>
-          </tr>
-        </tfoot>
-      </table>
+          </thead>
+          <tbody>
+            {orders.map((order, i) => (
+              <tr key={i} className="hover:bg-gray-50">
+                <td className="border p-2">{order.customerName || '-'}</td>
+                <td className="border p-2">
+                  {Array.isArray(order.meatType) ? order.meatType.join(', ') : order.meatType || '-'}
+                </td>
+                <td className="border p-2">{order.waiterName || '-'}</td>
+                <td className="border p-2">{order.kilogram || '-'}</td>
+                <td className="border p-2">{order.salesType || '-'}</td>
+                <td className="border p-2">
+                  {order.createdAt ? new Date(order.createdAt).toLocaleString() : '-'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr className="bg-gray-100 font-bold">
+              <td className="border p-2 text-right" colSpan="3">Total KG</td>
+              <td className="border p-2">{totalKg}</td>
+              <td className="border p-2" colSpan="2"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
+      {/* Chart Section */}
       <div className="max-w-md mx-auto">
-        <h2 className="text-xl font-semibold mb-2 text-center">KG by Meat Type</h2>
+        <h2 className="text-lg sm:text-xl font-semibold mb-2 text-center">
+          KG by Meat Type
+        </h2>
         <Pie data={pieData} />
       </div>
     </div>
