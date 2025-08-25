@@ -18,7 +18,7 @@ export default function OrderReportPage() {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:9000/api/orders')
+    axios.get('https://national-1.onrender.com/api/orders')
       .then(res => setOrders(res.data))
       .catch(err => console.error(err));
   }, []);

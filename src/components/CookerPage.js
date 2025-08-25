@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Clock, Filter } from 'lucide-react';
+import { Clock, Filter, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function Cooker() {
   const [orders, setOrders] = useState([]);
   const [activeFilter, setActiveFilter] = useState('today');
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchOrders();
@@ -14,7 +16,7 @@ function Cooker() {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:9000/api/orders');
+      const res = await axios.get('https://national-1.onrender.com/api/orders');
       const mappedOrders = res.data.map(order => ({
         id: order._id || order.id,
         timeDate: order.timeDate
@@ -51,12 +53,11 @@ function Cooker() {
   const todaysCount = orders.filter(order => order.timeDate.split(' ')[0] === today).length;
   const previousCount = orders.filter(order => order.timeDate.split(' ')[0] < today).length;
 
-  // Calculate time consumed between butcher sending and cooker finishing
   const getTimeConsumed = (start, end) => {
     if (!start || !end) return '-';
     const startDate = new Date(start);
     const endDate = new Date(end);
-    const diffMs = endDate - startDate; // milliseconds difference
+    const diffMs = endDate - startDate;
     if (diffMs < 0) return '-';
     const diffMins = Math.floor(diffMs / 60000);
     const hours = Math.floor(diffMins / 60);
@@ -67,18 +68,12 @@ function Cooker() {
   const handleFinish = async (order) => {
     try {
       const finishedAt = new Date().toISOString();
-      await axios.put(`http://localhost:9000/api/orders/${order.id}`, {
+      await axios.put(`https://national-1.onrender.com/api/orders/${order.id}`, {
         status: 'finished',
         finishedAt,
       });
-
       await fetchOrders();
-
-      const updatedOrder = {
-        ...order,
-        status: 'finished',
-        finishedAt,
-      };
+      const updatedOrder = { ...order, status: 'finished', finishedAt };
       generateReceipt(updatedOrder);
     } catch (error) {
       console.error('Error marking order as finished:', error);
@@ -87,7 +82,6 @@ function Cooker() {
 
   const generateReceipt = (order) => {
     const receiptWindow = window.open('', '', 'width=600,height=800');
-
     const itemsHTML = order.items.length
       ? order.items
           .map(
@@ -151,20 +145,30 @@ function Cooker() {
       </body>
       </html>
     `);
-
     receiptWindow.document.close();
     receiptWindow.print();
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // clear token
+    navigate('/LoginPage'); // go to LoginPage
   };
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4 flex items-center gap-3">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6 flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
             <Clock className="text-blue-600" size={32} />
             Order History
           </h1>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition"
+          >
+            <LogOut size={18} /> Logout
+          </button>
         </div>
 
         {/* Filter Buttons */}

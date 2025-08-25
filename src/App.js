@@ -13,6 +13,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/LoginPage" element={<LoginPage />} />
+
           <Route path="/AdminCreateUser" element={<AdminCreateUser />} />
           <Route path="/AllComponents" element={<AllComponents />} />
 

@@ -18,7 +18,7 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:9000/api/auth/signup', formData);
+      const res = await axios.post('https://national-1.onrender.com/api/auth/signup', formData);
       setMessage(res.data.message);
     } catch (err) {
       setMessage(err.response?.data?.message || 'Error creating account');

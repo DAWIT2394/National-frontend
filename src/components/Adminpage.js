@@ -42,7 +42,7 @@ const ORDERS_PER_PAGE = 5;
 
   const fetchItems = async () => {
     try {
-      const res = await axios.get('http://localhost:9000/api/items');
+      const res = await axios.get('https://national-1.onrender.com/api/items');
       setItems(res.data);
     } catch (e) {
       console.error('Fetch items failed', e);
@@ -51,7 +51,7 @@ const ORDERS_PER_PAGE = 5;
 
   const fetchWaiters = async () => {
     try {
-      const res = await axios.get('http://localhost:9000/api/waiters');
+      const res = await axios.get('https://national-1.onrender.com/api/waiters');
       setWaiters(res.data);
     } catch (e) {
       console.error('Fetch waiters failed', e);
@@ -60,7 +60,7 @@ const ORDERS_PER_PAGE = 5;
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get('http://localhost:9000/api/orders');
+      const res = await axios.get('https://national-1.onrender.com/api/orders');
       setOrders(res.data);
     } catch (e) {
       console.error('Fetch orders failed', e);
@@ -69,7 +69,7 @@ const ORDERS_PER_PAGE = 5;
 const handleDeletee = async (id) => {
     if (window.confirm('Are you sure you want to delete this order?')) {
       try {
-        await axios.delete(`http://localhost:9000/api/orders/${id}`);
+        await axios.delete(`https://national-1.onrender.com/api/orders/${id}`);
         fetchOrders();
       } catch {
         setErrorMessage('Failed to delete order.');
@@ -87,7 +87,7 @@ const handleDeletee = async (id) => {
           setSubmitting(false);
           return;
         }
-        await axios.post('http://localhost:9000/api/items', { name: itemName });
+        await axios.post('https://national-1.onrender.com/api/items', { name: itemName });
         setItemName('');
       } else {
         if (!waiterName.trim()) {
@@ -95,7 +95,7 @@ const handleDeletee = async (id) => {
           setSubmitting(false);
           return;
         }
-        await axios.post('http://localhost:9000/api/waiters', { name: waiterName });
+        await axios.post('https://national-1.onrender.com/api/waiters', { name: waiterName });
         setWaiterName('');
       }
       setRefresh((prev) => !prev);
@@ -116,8 +116,8 @@ const handleDeletee = async (id) => {
     try {
       const url =
         type === 'item'
-          ? `http://localhost:9000/api/items/${id}`
-          : `http://localhost:9000/api/waiters/${id}`;
+          ? `https://national-1.onrender.com/api/items/${id}`
+          : `https://national-1.onrender.com/api/waiters/${id}`;
       await axios.put(url, { name: newName.trim() });
       setRefresh((prev) => !prev);
     } catch (e) {
@@ -132,8 +132,8 @@ const handleDeletee = async (id) => {
     try {
       const url =
         type === 'item'
-          ? `http://localhost:9000/api/items/${id}`
-          : `http://localhost:9000/api/waiters/${id}`;
+          ? `https://national-1.onrender.com/api/items/${id}`
+          : `https://national-1.onrender.com/api/waiters/${id}`;
       await axios.delete(url);
       setRefresh((prev) => !prev);
     } catch (e) {

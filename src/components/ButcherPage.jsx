@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
   PieChart,
   Pie,
@@ -29,6 +30,22 @@ export default function ButcherPage() {
   const [editOrderId, setEditOrderId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const ORDERS_PER_PAGE = 5;
+
+  const navigate = useNavigate();
+
+  // 🔹 Redirect to login if no token found
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  // 🔹 Logout function
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/LoginPage');
+  };
 
   const now = new Date();
   const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -64,7 +81,7 @@ export default function ButcherPage() {
   const fetchItems = async () => {
     setLoadingItems(true);
     try {
-      const res = await axios.get('http://localhost:9000/api/items/');
+      const res = await axios.get('https://national-1.onrender.com/api/items/');
       setItems(res.data);
     } catch {
       setErrorMessage('Failed to load items.');
@@ -76,7 +93,7 @@ export default function ButcherPage() {
   const fetchWaiters = async () => {
     setLoadingWaiters(true);
     try {
-      const res = await axios.get('http://localhost:9000/api/waiters/');
+      const res = await axios.get('https://national-1.onrender.com/api/waiters/');
       setWaiters(res.data);
     } catch {
       setErrorMessage('Failed to load waiters.');
@@ -88,7 +105,7 @@ export default function ButcherPage() {
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res = await axios.get('http://localhost:9000/api/orders/');
+      const res = await axios.get('https://national-1.onrender.com/api/orders/');
       setOrders(res.data);
     } catch (err) {
       console.error('Failed to fetch orders', err);
@@ -141,10 +158,10 @@ export default function ButcherPage() {
 
     try {
       if (editOrderId) {
-        await axios.put(`http://localhost:9000/api/orders/${editOrderId}`, payload);
+        await axios.put(`https://national-1.onrender.com/api/orders/${editOrderId}`, payload);
         alert('Order updated successfully!');
       } else {
-        await axios.post('http://localhost:9000/api/orders/', payload);
+        await axios.post('https://national-1.onrender.com/api/orders/', payload);
         alert('Order submitted successfully!');
       }
       resetForm();
@@ -155,17 +172,6 @@ export default function ButcherPage() {
       setSubmitting(false);
     }
   };
-
-  // const handleDelete = async (id) => {
-  //   if (window.confirm('Are you sure you want to delete this order?')) {
-  //     try {
-  //       await axios.delete(`http://localhost:9000/api/orders/${id}`);
-  //       fetchOrders();
-  //     } catch {
-  //       setErrorMessage('Failed to delete order.');
-  //     }
-  //   }
-  // };
 
   const handleEdit = (order) => {
     setEditOrderId(order._id);
@@ -217,6 +223,12 @@ export default function ButcherPage() {
               className="bg-red-700 hover:bg-red-600 px-3 py-1 rounded border border-red-500 text-white disabled:opacity-50"
             >
               {loadingOrders ? 'Refreshing...' : 'Refresh Orders'}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded border border-red-700"
+            >
+              Logout
             </button>
             <span className="text-red-400">{formattedTime}</span>
           </div>
@@ -346,29 +358,18 @@ export default function ButcherPage() {
               <div className="space-y-4">
                 {paginatedOrders.map((order) => (
                   <div key={order._id} className="p-4 bg-zinc-800 border border-zinc-700 rounded-lg">
-                    <p>
-                      <strong>Customer:</strong> {order.customerName || 'N/A'}
-                    </p>
-                    <p>
-                      <strong>Type:</strong> {order.salesType}
-                    </p>
-                    <p>
-                      <strong>Items:</strong> {Array.isArray(order.meatType) ? order.meatType.join(', ') : order.meatType}
-                    </p>
-                    <p>
-                      <strong>KG:</strong> {order.kilogram}
-                    </p>
+                    <p><strong>Customer:</strong> {order.customerName || 'N/A'}</p>
+                    <p><strong>Type:</strong> {order.salesType}</p>
+                    <p><strong>Items:</strong> {Array.isArray(order.meatType) ? order.meatType.join(', ') : order.meatType}</p>
+                    <p><strong>KG:</strong> {order.kilogram}</p>
                     {order.salesType === 'INDOOR' && (
-                      <p>
-                        <strong>Waiter:</strong> {order.waiterName}
-                      </p>
+                      <p><strong>Waiter:</strong> {order.waiterName}</p>
                     )}
                     <p className="text-xs text-gray-400">Date: {new Date(order.createdAt).toLocaleString()}</p>
                     <div className="mt-2 flex gap-2">
                       <button onClick={() => handleEdit(order)} className="text-sm text-yellow-400 hover:underline">
                         ✏️ Edit
                       </button>
-                      {/* <button onClick={() => handleDelete(order._id)} className="text-sm text-red-400 hover:underline">🗑️ Delete</button> */}
                     </div>
                   </div>
                 ))}
@@ -384,9 +385,7 @@ export default function ButcherPage() {
                   >
                     ⬅️ Previous
                   </button>
-                  <span className="text-white text-sm">
-                    Page {currentPage} of {totalPages}
-                  </span>
+                  <span className="text-white text-sm">Page {currentPage} of {totalPages}</span>
                   <button
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
